@@ -12,6 +12,7 @@ func main() {
 	configs.InitializeViper()
 
 	models.InitializeDB()
+	models.InitializePostDB()
 
 	router := gin.Default()
 
@@ -20,10 +21,13 @@ func main() {
 	v1.Use(CORSMiddleware())
 	{
 		v1.GET("/", services.HandleMain)
+		v1.GET("/suggested", services.GetRandomUsers)
 		v1.GET("/followers", services.GetUserFollowers)
 		v1.GET("/following", services.GetUserFollowing)
 		v1.POST("/follow", services.FollowUser)
 		v1.POST("/unfollow", services.UnfollowUser)
+		v1.GET("/stats", services.GetUserStats)
+		v1.GET("/search", services.SearchUser)
 	}
 
 	port := viper.GetString("serverPort")
