@@ -48,7 +48,7 @@ func UnfollowUser(c *gin.Context) {
 
 	fmt.Println(query)
 	c.Header("Content-Type", "application/json")
-	err := models.FollowUser(query)
+	err := models.Unfollow(query)
 	if err != nil {
 		fmt.Println(err)
 		c.JSON(http.StatusBadRequest, gin.H{
