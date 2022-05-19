@@ -28,6 +28,7 @@ func main() {
 		v1.POST("/unfollow", services.UnfollowUser)
 		v1.GET("/stats", services.GetUserStats)
 		v1.GET("/search", services.SearchUser)
+		v1.GET("/check", services.IsFollowing)
 	}
 
 	port := viper.GetString("serverPort")

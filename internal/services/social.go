@@ -48,7 +48,7 @@ func UnfollowUser(c *gin.Context) {
 
 	fmt.Println(query)
 	c.Header("Content-Type", "application/json")
-	err := models.Unfollow(query)
+	err := models.UnfollowUser(query)
 	if err != nil {
 		fmt.Println(err)
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -59,6 +59,26 @@ func UnfollowUser(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"status": "success",
+	})
+}
+
+func IsFollowing(c *gin.Context) {
+	userId := c.Query("user_id")
+	checkId := c.Query("following_id")
+
+	c.Header("Content-Type", "application/json")
+	following, err := models.IsFollowing(userId, checkId)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"status":    "fail",
+			"following": false,
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"status":    "success",
+		"following": following,
 	})
 }
 

@@ -9,6 +9,20 @@ import (
 	"github.com/abcd-edu/gentoo-socialgraph/internal/models/types"
 )
 
+func IsFollowing(userId string, followingId string) (bool, error) {
+	sqlQuery := `
+	SELECT follower_id FROM social_graph
+	WHERE follower_id=$1 AND followed_id=$2
+	`
+	var check string
+	if err := postDb.QueryRow(sqlQuery, userId, followingId).Scan(&check); err != nil {
+		fmt.Println(err)
+		return false, nil
+	}
+
+	return true, nil
+}
+
 func FollowUser(entry types.SocialGraph) error {
 	sqlQuery := `
 		INSERT INTO
@@ -156,7 +170,7 @@ func GetRandomUsers(userId string, amount int) ([]types.BasicUser, error) {
 
 func GetUserStat(column string, userId string) (int, error) {
 	sqlQuery := fmt.Sprintf(`
-		SELECT COUNT(*) 
+		SELECT COUNT(*)
 		FROM social_graph
 		WHERE %s=$1;
 	`, column)
